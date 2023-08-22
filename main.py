@@ -21,7 +21,14 @@ RECT_SIZE = (100, 50)
 DISPLAY_SURFACE = pygame.display.set_mode((SCREEN_SIDE, SCREEN_SIDE))
 pygame.display.set_caption("Casse-Briques")
 
+class Plate(pygame.sprite.Sprite):
 
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load("Plate.png")
+        self.rect = pygame.Rect((x,y), (225, 25))
 
 class Brick(pygame.sprite.Sprite):
 
@@ -35,6 +42,10 @@ class Brick(pygame.sprite.Sprite):
         self.color = RED
 
 blocks = pygame.sprite.Group()
+
+plate = Plate(400, 950)
+
+blocks.add(plate)
 
 for i in range(10, 891, 110):
     for j in range(25, 475, 55):
