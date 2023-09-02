@@ -13,7 +13,7 @@ FramePerSec = pygame.time.Clock()
 
 # Screen information
 SCREEN_SIDE = 1000
-
+SPEED = 5
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 RECT_SIZE = (100, 50)
@@ -29,6 +29,17 @@ class Plate(pygame.sprite.Sprite):
         self.y = y
         self.image = pygame.image.load("Plate.png")
         self.rect = pygame.Rect((x,y), (225, 25))
+
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        if self.rect.left > 0:
+            if pressed_keys[K_LEFT]:
+                self.rect.move_ip(SPEED * -1, 0)
+
+        if self.rect.right < SCREEN_SIDE:
+            if pressed_keys[K_RIGHT]:
+                self.rect.move_ip(SPEED, 0)
+
 
 class Brick(pygame.sprite.Sprite):
 
@@ -62,6 +73,8 @@ while True:
     DISPLAY_SURFACE.fill(BLUE)
     for block in blocks:
         DISPLAY_SURFACE.blit(block.image, block.rect)
+
+    plate.move()
 
     pygame.display.update()
     FramePerSec.tick(FPS)
