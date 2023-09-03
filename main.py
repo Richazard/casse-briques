@@ -21,14 +21,23 @@ RECT_SIZE = (100, 50)
 DISPLAY_SURFACE = pygame.display.set_mode((SCREEN_SIDE, SCREEN_SIDE))
 pygame.display.set_caption("Casse-Briques")
 
+
+class Ball(pygame.sprite.Sprite):
+
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("Yellow_Ball.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (500, 600)
+
+
 class Plate(pygame.sprite.Sprite):
 
-    def __init__(self, x, y):
+    def __init__(self):
         super().__init__()
-        self.x = x
-        self.y = y
         self.image = pygame.image.load("Plate.png")
-        self.rect = pygame.Rect((x,y), (225, 25))
+        self.rect = self.image.get_rect()
+        self.rect.center = (500, 980)
 
     def move(self):
         pressed_keys = pygame.key.get_pressed()
@@ -48,19 +57,19 @@ class Brick(pygame.sprite.Sprite):
         self.size = (100, 50)
         self.image = pygame.image.load("RedRectangle.png")
         self.rect = pygame.Rect((x, y), self.size)
-        self.x = x
-        self.y = y
-        self.color = RED
 
-blocks = pygame.sprite.Group()
+forms = pygame.sprite.Group()
 
-plate = Plate(400, 950)
+plate = Plate()
 
-blocks.add(plate)
+ball = Ball()
+
+forms.add(plate)
+forms.add(ball)
 
 for i in range(10, 891, 110):
     for j in range(25, 475, 55):
-        blocks.add(Brick(i,j))
+        forms.add(Brick(i,j))
 
 while True:
 
@@ -71,7 +80,7 @@ while True:
             sys.exit()
 
     DISPLAY_SURFACE.fill(BLUE)
-    for block in blocks:
+    for block in forms:
         DISPLAY_SURFACE.blit(block.image, block.rect)
 
     plate.move()
