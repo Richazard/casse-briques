@@ -43,6 +43,9 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.left < 0 or self.rect.right > SCREEN_SIDE:
             self.right_left *= -1
 
+    def bounce_plate(self):
+        self.up_down *= -1
+
     def touch_ground(self):
         if self.rect.bottom > SCREEN_SIDE:
             return True
@@ -105,6 +108,8 @@ while True:
         DISPLAY_SURFACE.blit(block.image, block.rect)
 
     plate.move()
+    if pygame.sprite.collide_rect(ball, plate):
+        ball.bounce_plate()
     ball.bounce_wall()
     ball.move()
 
