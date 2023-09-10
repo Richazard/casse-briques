@@ -18,10 +18,11 @@ BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 RECT_SIZE = (100, 50)
 
+# Creation of the surface
 DISPLAY_SURFACE = pygame.display.set_mode((SCREEN_SIDE, SCREEN_SIDE))
 pygame.display.set_caption("Casse-Briques")
 
-
+# Declaration of ball class
 class Ball(pygame.sprite.Sprite):
 
     def __init__(self):
@@ -49,7 +50,7 @@ class Plate(pygame.sprite.Sprite):
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(SPEED, 0)
 
-
+# Declaration of brick class
 class Brick(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
@@ -58,18 +59,22 @@ class Brick(pygame.sprite.Sprite):
         self.image = pygame.image.load("RedRectangle.png")
         self.rect = pygame.Rect((x, y), self.size)
 
-forms = pygame.sprite.Group()
+# Initiating plate and ball
 
 plate = Plate()
-
 ball = Ball()
 
+# Creating sprite group and adding everything to it
+
+forms = pygame.sprite.Group()
 forms.add(plate)
 forms.add(ball)
 
 for i in range(10, 891, 110):
     for j in range(25, 475, 55):
         forms.add(Brick(i,j))
+
+# Game loop
 
 while True:
 
