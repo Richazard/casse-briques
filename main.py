@@ -30,7 +30,18 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.image.load("Yellow_Ball.png")
         self.rect = self.image.get_rect()
         self.rect.center = (500, 600)
+        self.up_down = 5
+        self.right_left = 0
 
+    def move(self):
+        self.rect.move_ip(self.right_left, self.up_down)
+
+    def bounce_wall(self):
+        if self.rect.top < 0 or self.rect.bottom > SCREEN_SIDE:
+            self.up_down *= -1
+
+        if self.rect.left < 0 or self.rect.right > SCREEN_SIDE:
+            self.right_left *= -1
 
 class Plate(pygame.sprite.Sprite):
 
@@ -89,6 +100,7 @@ while True:
         DISPLAY_SURFACE.blit(block.image, block.rect)
 
     plate.move()
+    ball.move()
 
     pygame.display.update()
     FramePerSec.tick(FPS)
