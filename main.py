@@ -43,6 +43,11 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.left < 0 or self.rect.right > SCREEN_SIDE:
             self.right_left *= -1
 
+    def touch_ground(self):
+        if self.rect.bottom > SCREEN_SIDE:
+            return True
+        return False
+
 class Plate(pygame.sprite.Sprite):
 
     def __init__(self):
@@ -102,6 +107,10 @@ while True:
     plate.move()
     ball.bounce_wall()
     ball.move()
+
+    if ball.touch_ground():
+        pygame.quit()
+        sys.exit()
 
     pygame.display.update()
     FramePerSec.tick(FPS)
