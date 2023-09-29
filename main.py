@@ -13,24 +13,28 @@ FramePerSec = pygame.time.Clock()
 
 # Screen information
 SCREEN_SIDE = 1000
-SPEED = 5
+SPEED = 8
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
-RECT_SIZE = (100, 50)
 
 # Creation of the surface
 DISPLAY_SURFACE = pygame.display.set_mode((SCREEN_SIDE, SCREEN_SIDE))
 pygame.display.set_caption("Casse-Briques")
+
+
+def calculate_coefficient(n1, n2, coeff):
+    return (n1-n2)/coeff
+
 
 # Declaration of ball class
 class Ball(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("Yellow_Ball.png")
+        self.image = pygame.image.load("images/Yellow_ball2.png")
         self.rect = self.image.get_rect()
         self.rect.center = (500, 600)
-        self.up_down = 5
+        self.up_down = SPEED
         self.right_left = 0
 
     def move(self):
@@ -43,21 +47,25 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.left < 0 or self.rect.right > SCREEN_SIDE:
             self.right_left *= -1
 
-    def bounce_plate(self):
-        self.up_down *= -1
+    def bounce_plate(self, plate):
+
+        self.right_left = SPEED * calculate_coefficient(self.rect.centerx, plate.rect.center[0], plate.rect.size[0])
+        self.up_down = abs(self.right_left) - SPEED
+
 
     def touch_ground(self):
         if self.rect.bottom > SCREEN_SIDE:
             return True
         return False
 
+
 class Plate(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("Plate.png")
+        self.image = pygame.image.load("images/Plate.png")
         self.rect = self.image.get_rect()
-        self.rect.center = (500, 980)
+        self.rect.center = (500, 990)
 
     def move(self):
         pressed_keys = pygame.key.get_pressed()
@@ -75,7 +83,7 @@ class Brick(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.size = (100, 50)
-        self.image = pygame.image.load("RedRectangle.png")
+        self.image = pygame.image.load("images/RedRectangle.png")
         self.rect = pygame.Rect((x, y), self.size)
 
 # Initiating plate and ball
@@ -109,7 +117,8 @@ while True:
 
     plate.move()
     if pygame.sprite.collide_rect(ball, plate):
-        ball.bounce_plate()
+        print("bounce")
+        ball.bounce_plate(plate)
     ball.bounce_wall()
     ball.move()
 
