@@ -52,7 +52,6 @@ class Ball(pygame.sprite.Sprite):
         self.right_left = SPEED * calculate_coefficient(self.rect.centerx, plate.rect.center[0], plate.rect.size[0])
         self.up_down = abs(self.right_left) - SPEED
 
-
     def touch_ground(self):
         if self.rect.bottom > SCREEN_SIDE:
             return True
@@ -77,6 +76,7 @@ class Plate(pygame.sprite.Sprite):
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(SPEED, 0)
 
+
 # Declaration of brick class
 class Brick(pygame.sprite.Sprite):
 
@@ -87,11 +87,11 @@ class Brick(pygame.sprite.Sprite):
         self.rect = pygame.Rect((x, y), self.size)
 
 # Initiating plate and ball
-
 plate = Plate()
 ball = Ball()
 
-# Creating sprite group and adding everything to it
+# Creating sprite groups and adding everything to it
+bricks = pygame.sprite.Group()
 
 forms = pygame.sprite.Group()
 forms.add(plate)
@@ -99,7 +99,12 @@ forms.add(ball)
 
 for i in range(10, 891, 110):
     for j in range(25, 475, 55):
-        forms.add(Brick(i,j))
+        brick = Brick(i,j)
+        forms.add(brick)
+        bricks.add(brick)
+
+
+
 
 # Game loop
 
@@ -117,10 +122,11 @@ while True:
 
     plate.move()
     if pygame.sprite.collide_rect(ball, plate):
-        print("bounce")
         ball.bounce_plate(plate)
     ball.bounce_wall()
     ball.move()
+
+    if pygame.sprite.spritecollideany(ball, bricks):
 
     if ball.touch_ground():
         pygame.quit()
